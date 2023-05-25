@@ -7,7 +7,6 @@
 /*global angular, Recaptcha*/
 (function (ng) {
 	'use strict';
-
 	ng.module('fayzaan.gRecaptcha.v3', []);
 }(angular));
 /*global angular*/
@@ -26,7 +25,7 @@
 				var key = null;
 				var url = 'https://www.google.com/recaptcha/api.js';
 				var onLoadFunctionName = 'onGRecaptchaScriptLoaded';
-				var defered = $q.defer();
+				var deferred = $q.defer();
 				var initializing = false;
 				var initialized = false;
 
@@ -46,7 +45,7 @@
 
 		    function execute (params) {
 		      if (isInitializing()) {
-		        return defered
+		        return deferred
 		          .promise
 		          .then(function () {
 		            return execute(params);
@@ -79,7 +78,7 @@
 		          if (isExecuteAvailable()) {
 		            initialized = true;
 		            initializing = false;
-		            defered.resolve();
+		            deferred.resolve();
 		          } else if (scriptExists()) {
 		            initializing = true;
 		            var wait = $interval(function () {
@@ -88,7 +87,7 @@
 
 		                initialized = true;
 		                initializing = false;
-		                defered.resolve();
+		                deferred.resolve();
 		              }
 		            }, 50)
 		          } else {
@@ -96,7 +95,7 @@
 		            $window[onLoadFunctionName] = function () {
 		              initialized = true;
 		              initializing = false;
-		              defered.resolve();
+		              deferred.resolve();
 		            };
 
 		            writeScript();
@@ -104,11 +103,11 @@
 
 
 		        } catch (e) {
-		          defered.reject(e);
+		          deferred.reject(e);
 		        }
 		      });
 
-		      return defered.promise;
+		      return deferred.promise;
 		    }
 
 				return {
@@ -121,4 +120,4 @@
 			}
 		]
 	})
-})(angular)
+}(angular));
